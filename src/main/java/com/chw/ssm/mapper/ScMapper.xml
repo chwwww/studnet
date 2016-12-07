@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chw.ssm.mapper.ScMapper" >
+  <resultMap id="BaseResultMap" type="com.chw.ssm.po.Sc" >
+    <id column="SCID" property="scid" jdbcType="DECIMAL" />
+    <result column="SID" property="sid" jdbcType="DECIMAL" />
+    <result column="CID" property="cid" jdbcType="DECIMAL" />
+    <result column="GRADE" property="grade" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    SCID, SID, CID, GRADE
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.chw.ssm.po.ScExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from SC
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from SC
+    where SCID = #{scid,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from SC
+    where SCID = #{scid,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.chw.ssm.po.ScExample" >
+    delete from SC
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.chw.ssm.po.Sc" >
+    insert into SC (SCID, SID, CID, 
+      GRADE)
+    values (#{scid,jdbcType=DECIMAL}, #{sid,jdbcType=DECIMAL}, #{cid,jdbcType=DECIMAL}, 
+      #{grade,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.chw.ssm.po.Sc" >
+    insert into SC
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="scid != null" >
+        SCID,
+      </if>
+      <if test="sid != null" >
+        SID,
+      </if>
+      <if test="cid != null" >
+        CID,
+      </if>
+      <if test="grade != null" >
+        GRADE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="scid != null" >
+        #{scid,jdbcType=DECIMAL},
+      </if>
+      <if test="sid != null" >
+        #{sid,jdbcType=DECIMAL},
+      </if>
+      <if test="cid != null" >
+        #{cid,jdbcType=DECIMAL},
+      </if>
+      <if test="grade != null" >
+        #{grade,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.chw.ssm.po.ScExample" resultType="java.lang.Integer" >
+    select count(*) from SC
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update SC
+    <set >
+      <if test="record.scid != null" >
+        SCID = #{record.scid,jdbcType=DECIMAL},
+      </if>
+      <if test="record.sid != null" >
+        SID = #{record.sid,jdbcType=DECIMAL},
+      </if>
+      <if test="record.cid != null" >
+        CID = #{record.cid,jdbcType=DECIMAL},
+      </if>
+      <if test="record.grade != null" >
+        GRADE = #{record.grade,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update SC
+    set SCID = #{record.scid,jdbcType=DECIMAL},
+      SID = #{record.sid,jdbcType=DECIMAL},
+      CID = #{record.cid,jdbcType=DECIMAL},
+      GRADE = #{record.grade,jdbcType=DECIMAL}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.chw.ssm.po.Sc" >
+    update SC
+    <set >
+      <if test="sid != null" >
+        SID = #{sid,jdbcType=DECIMAL},
+      </if>
+      <if test="cid != null" >
+        CID = #{cid,jdbcType=DECIMAL},
+      </if>
+      <if test="grade != null" >
+        GRADE = #{grade,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where SCID = #{scid,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.chw.ssm.po.Sc" >
+    update SC
+    set SID = #{sid,jdbcType=DECIMAL},
+      CID = #{cid,jdbcType=DECIMAL},
+      GRADE = #{grade,jdbcType=DECIMAL}
+    where SCID = #{scid,jdbcType=DECIMAL}
+  </update>
+</mapper>

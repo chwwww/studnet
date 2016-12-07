@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chw.ssm.mapper.ScMapperCustom" >
+  <insert id="saveGrade" parameterType="scCustom">
+  	insert into sc(sid,cid,grade) values(#{student.sid},#{course.cid},#{grade})
+  </insert>
+  
+  <select id="studentIdFandName" parameterType="scCustom" resultType="int">
+  	select count(*) from student where sid=#{student.sid} and name=#{student.name}
+  </select>
+  <select id="alreadyHasCourse" parameterType="scCustom" resultType="int">
+  	select count(*) from sc  where cid=#{course.cid} and sid=#{student.sid}
+  </select>
+  
+  <select id="selectGrades" parameterType="scCustom" resultType="report">
+  	select sc.grade,course.name from sc,course where sc.sid=#{student.sid} and sc.cid=course.cid
+  </select>
+  
+  <select id="gradeAvgAndSum" parameterType="scCustom" resultType="scCustom">
+  	select avg(grade) as avgGrade ,sum(grade) as totalGrade from sc,course where sc.sid=#{student.sid} and sc.cid=course.cid
+  </select>
+  
+  
+  <select id="selectCourseGrades" parameterType="scCustom" resultType="courseGrade">
+  	select student.name as sname,department.name as dname,sc.grade
+  	from course,student,sc,department 
+  	where department.did=student.did and sc.sid=student.sid and sc.cid=course.cid and course.name = #{course.name}
+  </select>
+  
+  <select id="courseGradeAvg" parameterType="scCustom" resultType="scCustom">
+  	select avg(grade) as avgGrade from sc,course where course.name = #{course.name} and sc.cid=course.cid
+  </select>
+  
+  <update id="updateGrade" parameterType="scCustom">
+  	update sc set grade=#{grade} where cid=#{course.cid} and sid=#{student.sid}
+  </update>
+  
+  <delete id="deleteGrade" parameterType="scCustom">
+  	delete from sc where cid=#{course.cid} and sid=#{student.sid}
+  </delete>
+</mapper>

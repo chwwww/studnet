@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chw.ssm.mapper.StudentMapperCustom">
+	<select id="selectCount" parameterType="studentQueryVo" resultType="int">
+		select count(*) from student where name like '%${studentCustom.name}%'
+	</select>
+
+	<resultMap type="StudentCustom" id="studentdepartment">
+		<id property="sid" column="sid" />
+		<result property="name"  column="s_name"/>
+		<result property="birthday" column="birthday" />
+		<result property="sex" column="sex" />
+		<association property="department" javaType="Department" >
+			<id property="did" column="d_did" />
+			<result property="name" column="d_name" />
+		</association>
+	</resultMap>
+	
+	<select id="selectByName" parameterType="studentQueryVo" resultMap="studentdepartment">
+		<![CDATA[
+			select * from(
+				select a.*,rownum rn from(
+					select student.sid,student.name as s_name,student.birthday,student.sex,department.name as d_name,department.did as d_did 
+					from student,department where student.name like '%${studentCustom.name}%' 
+					and student.did=department.did order by student.sid
+				)a where rownum <= ${page}*${rows}
+			)where rn>(${page}-1)*${rows}
+		]]>
+	</select>
+	
+	<insert id="saveStudent" parameterType="studentCustom">
+		insert into student(name,birthday,sex,did) values(#{name},#{birthday},#{sex},#{department.did})
+	</insert>
+	
+	<delete id="deleteByIds" parameterType="studentQueryVo">
+		delete from student where sid in (${sids})
+	</delete>
+	
+	<update id="update" parameterType="studentCustom">
+		update student set sex=#{sex} , birthday=#{birthday} , did=#{department.did} where name=#{name}
+	</update>
+	
+</mapper>
